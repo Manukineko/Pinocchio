@@ -2,10 +2,10 @@
   "resources": [
     {"id":{"name":"PinocchioSprite","path":"scripts/PinocchioSprite/PinocchioSprite.yy",},"order":0,},
     {"id":{"name":"PinocchioSpriteExt","path":"scripts/PinocchioSpriteExt/PinocchioSpriteExt.yy",},"order":1,},
-    {"id":{"name":"PinocchioCleanUpTick","path":"scripts/PinocchioCleanUpTick/PinocchioCleanUpTick.yy",},"order":2,},
+    {"id":{"name":"PinocchioPostDrawEvent","path":"scripts/PinocchioPostDrawEvent/PinocchioPostDrawEvent.yy",},"order":2,},
     {"id":{"name":"oController","path":"objects/oController/oController.yy",},"order":2,},
     {"id":{"name":"__PinocchioSystem","path":"scripts/__PinocchioSystem/__PinocchioSystem.yy",},"order":4,},
-    {"id":{"name":"PinocchioCleanUpSweep","path":"scripts/PinocchioCleanUpSweep/PinocchioCleanUpSweep.yy",},"order":3,},
+    {"id":{"name":"PinocchioCleanUp","path":"scripts/PinocchioCleanUp/PinocchioCleanUp.yy",},"order":3,},
     {"id":{"name":"sprTest1","path":"sprites/sprTest1/sprTest1.yy",},"order":4,},
     {"id":{"name":"oTest","path":"objects/oTest/oTest.yy",},"order":3,},
     {"id":{"name":"rmMain","path":"rooms/rmMain/rmMain.yy",},"order":1,},

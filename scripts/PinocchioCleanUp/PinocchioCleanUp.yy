@@ -6,7 +6,7 @@
     "path": "folders/Pinocchio.yy",
   },
   "resourceVersion": "1.0",
-  "name": "PinocchioCleanUpSweep",
+  "name": "PinocchioCleanUp",
   "tags": [],
   "resourceType": "GMScript",
 }
