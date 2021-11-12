@@ -9,26 +9,11 @@
 /// @param y
 /// @param [identifier="anonymous"]
 
-function PinocchioSprite(_spriteIndex, _startImageIndex, _speed, _x, _y, _ident = "anonymous")
+function PinocchioSprite(_spriteIndex, _startImageIndex, _speed, _x, _y, _identifier = __PINOCCHIO_DEFAULT_IDENTIFIER)
 {
-    var _instanceDataStruct = global.__pinocchioInstanceMap[? id];
-    if (_instanceDataStruct == undefined)
+    with(__PinocchioCache(id, _spriteIndex, _startImageIndex, _speed, _identifier))
     {
-        _instanceDataStruct = {};
-        global.__pinocchioInstanceMap[? id] = _instanceDataStruct;
-        ds_list_add(global.__pinocchioInstanceList, id);
+        draw_sprite(_spriteIndex, imageIndex, _x, _y);
+        return self;
     }
-    
-    var _animDataStruct = _instanceDataStruct[$ _spriteIndex];
-    if (_animDataStruct == undefined)
-    {
-        _animDataStruct = {};
-        _instanceDataStruct[$ _spriteIndex] = _animDataStruct;
-    }
-    
-    var _image = _animDataStruct[$ _ident];
-    if (_image == undefined)_image = _startImageIndex;
-    
-    draw_sprite(_spriteIndex, _image, _x, _y);
-    _animDataStruct[$ _ident] = _image + _speed;
 }

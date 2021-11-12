@@ -1,2 +1,4 @@
-PinocchioSprite(sprTest1, 0, 0.1, x, y, "a");
-PinocchioSprite(sprTest1, 1, 0.1, x + 32, y, "b");
+PinocchioSprite(sprTest1, 0, 0.1, x, y).Callback(function(_spriteIndex, _imageIndex, _speed, _identifier)
+{
+    show_debug_message(string(current_time) + ": " + string(id) + "    " + string(_imageIndex));
+});
