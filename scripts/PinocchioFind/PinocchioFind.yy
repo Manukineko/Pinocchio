@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "I'm a real boy",
-    "path": "folders/Pinocchio/(System)/I'm a real boy.yy",
+    "name": "Pinocchio",
+    "path": "folders/Pinocchio.yy",
   },
   "resourceVersion": "1.0",
-  "name": "PinocchioPostDrawEvent",
+  "name": "PinocchioFind",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -19,12 +19,12 @@
 
 function PinocchioGeneric(_identifier, _startValue, _speed, _minValue, _maxValue)
 {
-    __pinocchioPointer = ptr(self);
+    __PINOCCHIO_MAKE_FINGERPRINT;
     
-    var _animator = __PinocchioCacheTest(__pinocchioPointer, _identifier);
+    var _animator = __PinocchioCacheTest(__pinocchioFingerprint, _identifier);
     if (_animator == undefined)
     {
-        _animator = new __PinocchioClassAnimator(__pinocchioPointer, _identifier, _startValue, _speed, _minValue, _maxValue);
+        _animator = new __PinocchioClassAnimator(__pinocchioFingerprint, _identifier, _startValue, _speed, _minValue, _maxValue);
     }
     else
     {

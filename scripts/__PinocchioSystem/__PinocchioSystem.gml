@@ -1,9 +1,13 @@
 #macro __PINOCCHIO_VERSION  "0.0.2"
 #macro __PINOCCHIO_DATE     "2021-11-11"
 
+//Whether to use a layer script hack to run Pinocchio's Post Draw event code automatically
+#macro __PINOCCHIO_AUTO_POST_DRAW_EVENT  true
+
 show_debug_message("Pinocchio: Welcome to Pinocchio by @jujuadams! This is version " + __PINOCCHIO_VERSION + ", " + __PINOCCHIO_DATE);
 
 #macro __PINOCCHIO_DEFAULT_IDENTIFIER  "anonymous"
+#macro __PINOCCHIO_MAKE_FINGERPRINT    __pinocchioFingerprint = is_struct(self)? ptr(self) : id;
 
 // Use a list here because it's faster to add to (also this is a static data structure so no GC needed on it)
 global.__pinocchioInstanceList = ds_list_create();
@@ -14,6 +18,21 @@ global.__pinocchioInstanceMap = ds_map_create();
 
 //Index for the internal GC sweep
 global.__pinocchioSweepIndex = 0;
+
+//Set up a secret layer in every room that runs the Post Draw event code
+var _room = 0;
+repeat(9999)
+{
+    if (room_exists(_room))
+    {
+        layer_set_target_room(_room);
+        var _layer = layer_create(-16000);
+        layer_script_end(_layer, PinocchioPostDrawEvent);
+        layer_reset_target_room();
+    }
+    
+    ++_room;
+}
 
 function __PinocchioCacheTest(_creator, _identifier)
 {

@@ -10,20 +10,28 @@ function PinocchioCleanUp()
     var _instanceList = global.__pinocchioInstanceList;
     var _instanceMap = global.__pinocchioInstanceMap;
     
-    var _i = ds_list_size(_instanceList) - 1;
-    repeat(_i+1)
+    var _index = ds_list_size(_instanceList) - 1;
+    repeat(_index+1)
     {
-        var _pointer = _instanceList[| _i];
-        try
+        var _pointer = _instanceList[| _index];
+        if (is_ptr(_pointer))
         {
-            var _dummy = _pointer.__pinocchioPointer;
+            try
+            {
+                var _dummy = _pointer.__pinocchioFingerprint;
+            }
+            catch(_)
+            {
+                ds_list_delete(_instanceList, _index);
+                ds_map_delete(_instanceMap, _pointer);
+            }
         }
-        catch(_)
+        else if (!instance_exists(_pointer))
         {
-            ds_list_delete(_instanceList, _i);
+            ds_list_delete(_instanceList, _index);
             ds_map_delete(_instanceMap, _pointer);
         }
         
-        --_i;
+        --_index;
     }
 }

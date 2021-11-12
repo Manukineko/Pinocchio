@@ -29,13 +29,13 @@
 
 function PinocchioSpriteExt(_spriteIndex, _startImageIndex, _speed, _x, _y, _xScale, _yScale, _angle, _blend, _alpha, _identifier = __PINOCCHIO_DEFAULT_IDENTIFIER)
 {
+    __PINOCCHIO_MAKE_FINGERPRINT;
     var _fullIdentifier = string(_spriteIndex) + ":" + _identifier;
-    __pinocchioPointer = ptr(self);
     
-    var _animator = __PinocchioCacheTest(__pinocchioPointer, _fullIdentifier);
+    var _animator = __PinocchioCacheTest(__pinocchioFingerprint, _fullIdentifier);
     if (_animator == undefined)
     {
-        _animator = new __PinocchioClassAnimator(__pinocchioPointer, _fullIdentifier, _startImageIndex, _speed, 0, sprite_get_number(_spriteIndex) - math_get_epsilon());
+        _animator = new __PinocchioClassAnimator(__pinocchioFingerprint, _fullIdentifier, _startImageIndex, _speed, 0, sprite_get_number(_spriteIndex) - math_get_epsilon());
         _animator.spriteBased = true;
     }
     else
