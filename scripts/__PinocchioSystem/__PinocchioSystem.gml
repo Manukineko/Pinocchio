@@ -15,7 +15,14 @@ global.__pinocchioInstanceMap = ds_map_create();
 //Index for the internal GC sweep
 global.__pinocchioSweepIndex = 0;
 
-function __PinocchioCache(_creator, _spriteIndex, _startImageIndex, _speed, _identifier)
+function __PinocchioCacheTest(_creator, _identifier)
+{
+    var _instanceDataStruct = global.__pinocchioInstanceMap[? _creator];
+    if (_instanceDataStruct == undefined) return undefined;
+    return _instanceDataStruct[$ _identifier];
+}
+
+function __PinocchioClassAnimator(_creator, _identifier, _startValue, _speed, _minValue, _maxValue) constructor
 {
     if (_speed < 0) show_error("Pinocchio:\nSpeed cannot be negative\n ", true);
     
@@ -27,106 +34,100 @@ function __PinocchioCache(_creator, _spriteIndex, _startImageIndex, _speed, _ide
         ds_list_add(global.__pinocchioInstanceList, _creator);
     }
     
-    var _animDataStruct = _instanceDataStruct[$ _spriteIndex];
-    if (_animDataStruct == undefined)
-    {
-        _animDataStruct = {};
-        _instanceDataStruct[$ _spriteIndex] = _animDataStruct;
-    }
+    _instanceDataStruct[$ _identifier] = self;
     
-    var _occurrence = _animDataStruct[$ _identifier];
-    if (_occurrence == undefined)
-    {
-        _occurrence = new __PinocchioClassOccurrence(_creator, _spriteIndex, _startImageIndex, _speed, _identifier);
-        _animDataStruct[$ _identifier] = _occurrence;
-    }
-    else
-    {
-        _occurrence.speed = _speed;
-        _occurrence.__Tick();
-    }
     
-    return _occurrence;
     
-}
-
-function __PinocchioClassOccurrence(_creator, _spriteIndex, _startImageIndex, _speed, _identifier) constructor
-{
-    creator = _creator;
-    identifier = _identifier;
-    spriteIndex = _spriteIndex;
-    imageNumber = sprite_get_number(_spriteIndex);
-    imageIndex = _startImageIndex;
-    speed = _speed;
-    callback = undefined;
-    endOfAnimation = false;
-    animationMode = 0; // 0 = Loop, 1 = Once, 2 = Ping-pong
+    minValue = min(_minValue, _maxValue);
+    maxValue = max(_minValue, _maxValue);
+    value    = ((_startValue - minValue) mod (maxValue - minValue)) + minValue;
+    speed    = _speed;
+    
+    spriteBased = false;
+    animation_type = 0; //0 = Loop, 1 = Once, 2 = Ping-pong, 3 = Sharp ping-pong
     pingPongDirection = 1;
-    onceComplete = false;
+    
+    static Get = function()
+    {
+        return value;
+    }
     
     static Once = function()
     {
-        animationMode = 1;
+        animation_type = 1;
         return self;
     }
     
     static PingPong = function()
     {
-        animationMode = 2;
+        animation_type = 2;
         return self;
     }
     
-    static Callback = function(_callback)
+    static PingPongSharp = function()
     {
-        callback = _callback;
-        __CheckCallback();
+        if (!spriteBased) show_error("Pinocchio:\n.PingPongSharp() can only be used with sprite-based animators\n ", true);
+        animation_type = 3;
         return self;
     }
     
     static __Tick = function()
     {
-        endOfAnimation = false;
-        
-        if (animationMode == 0)
+        switch(animation_type)
         {
-            imageIndex = imageIndex + speed;
-            __CheckCallback();
-            imageIndex = imageIndex mod imageNumber;
-        }
-        else if (animationMode == 1)
-        {
-            if (!onceComplete)
-            {
-                imageIndex = imageIndex + speed;
-                __CheckCallback();
-                if (onceComplete) imageIndex = min(imageNumber - 1, imageIndex);
-            }
-        }
-        else if (animationMode == 2)
-        {
-            imageIndex = imageIndex + pingPongDirection*speed;
-            __CheckCallback();
-            imageIndex = imageIndex mod imageNumber;
-        }
-    }
-    
-    static __CheckCallback = function()
-    {
-        if (!endOfAnimation)
-        {
-            if ((imageIndex >= imageNumber) || ((pingPongDirection < 0) && (imageIndex <= 0)))
-            {
-                endOfAnimation = true;
-                onceComplete = true;
-                
-                if (is_method(callback))
+            case 0:
+                value = ((value - minValue + speed) mod (maxValue - minValue)) + minValue;
+            break;
+            
+            case 1:
+                value = min(maxValue, value + speed);
+            break;
+            
+            case 2:
+                if (pingPongDirection > 0)
                 {
-                    method(creator, callback)(spriteIndex, imageIndex, speed, identifier);
-                    return true;
+                    value += speed;
+                    
+                    if (value >= maxValue)
+                    {
+                        value = maxValue;
+                        pingPongDirection = -1;
+                    }
                 }
-            }
+                else
+                {
+                    value -= speed;
+                    
+                    if (value <= minValue)
+                    {
+                        value = minValue;
+                        pingPongDirection = 1;
+                    }
+                }
+            break;
+            
+            case 3:
+                if (pingPongDirection > 0)
+                {
+                    value += speed;
+                    
+                    if (value >= maxValue)
+                    {
+                        value = ceil(maxValue) - 1;
+                        pingPongDirection = -1;
+                    }
+                }
+                else
+                {
+                    value -= speed;
+                    
+                    if (value <= minValue)
+                    {
+                        value = minValue + 1;
+                        pingPongDirection = 1;
+                    }
+                }
+            break;
         }
-        
-        return false;
     }
 }

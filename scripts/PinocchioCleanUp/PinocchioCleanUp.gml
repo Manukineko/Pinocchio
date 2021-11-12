@@ -13,11 +13,15 @@ function PinocchioCleanUp()
     var _i = ds_list_size(_instanceList) - 1;
     repeat(_i+1)
     {
-        var _instance = _instanceList[| _i];
-        if (!instance_exists(_instance))
+        var _pointer = _instanceList[| _i];
+        try
+        {
+            var _dummy = _pointer.__pinocchioPointer;
+        }
+        catch(_)
         {
             ds_list_delete(_instanceList, _i);
-            ds_map_delete(_instanceMap, _instance);
+            ds_map_delete(_instanceMap, _pointer);
         }
         
         --_i;
